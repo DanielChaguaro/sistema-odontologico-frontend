@@ -7,6 +7,10 @@ describe('describeAudit', () => {
     expect(describeAudit('CONSENT', 'TRATAMIENTO_DATOS=true')).toBe('Tratamiento de datos personales: otorgado'))
   it('traduce cambios de estado', () => expect(describeAudit('STATUS_CHANGED', 'ACTIVE->INACTIVE')).toBe('Activo → Inactivo'))
   it('sin detalle devuelve vacío', () => expect(describeAudit('READ', null)).toBe(''))
+  it('abrevia identificadores del dentigrama', () => {
+    expect(describeAudit('ODONTOGRAM_READ', 'fdi=36')).toBe('Pieza 36')
+    expect(describeAudit('FINDING_ADD', 'consultation=0123456789ab,finding=abcdef012345')).toBe('Consulta 01234567… · hallazgo abcdef01…')
+  })
 })
 
 describe('fechas', () => {

@@ -150,3 +150,46 @@ test('permisos: la odontóloga no ve la administración ni puede entrar a ella',
   await expect(page.getByText('1005-2019-123456')).toBeVisible()
   await shot(page, '13-odontologa-perfil')
 })
+
+test('RF-03 (CP-01): la odontóloga registra un hallazgo por pieza en el dentigrama', async ({ page }) => {
+  await login(page, 'dentist')
+  await page.goto('/dentigrama')
+  await page.getByPlaceholder('Buscar paciente').fill('1710034065')
+  await page.getByRole('option').first().click()
+
+  // Repetible: reutiliza la consulta abierta de una corrida anterior o abre una nueva.
+  const open = page.getByRole('button', { name: 'Nueva consulta' })
+  if (await open.isVisible()) {
+    await open.click()
+    await page.getByRole('button', { name: 'Permanente' }).click()
+    await page.locator('#consultation-reason').fill('Control E2E')
+    await page.getByRole('button', { name: 'Abrir consulta' }).click()
+  }
+  await expect(page.getByText('Consulta abierta', { exact: true })).toBeVisible()
+
+  await page.getByRole('button', { name: 'Caries' }).first().click()
+  const tooth36 = page.locator('g.tooth').filter({ has: page.locator('title', { hasText: /^Pieza 36$/ }) })
+  await tooth36.locator('rect.face').click()
+  await expect(page.getByText('Primer molar inferior izquierdo')).toBeVisible()
+  const finding = page.locator('.finding-list li').filter({ hasText: 'Caries · Oclusal / incisal' })
+  await expect(finding).toBeVisible()
+  await shot(page, '14-dentigrama')
+
+  // Error de registro: se anula con motivo y queda en el historial de la pieza.
+  await finding.getByRole('button', { name: 'Anular' }).click()
+  await page.locator('#annul-reason').fill('Prueba E2E')
+  await page.getByRole('dialog').getByRole('button', { name: 'Anular' }).click()
+  await expect(finding).toHaveCount(0)
+  await page.getByRole('button', { name: 'Historial de la pieza' }).click()
+  await expect(page.getByText('Anulado: Prueba E2E').first()).toBeVisible()
+})
+
+test('RF-03: el administrador del consultorio consulta el dentigrama sin poder modificarlo', async ({ page }) => {
+  await login(page, 'admin')
+  await page.goto('/dentigrama')
+  await page.getByPlaceholder('Buscar paciente').fill('1710034065')
+  await page.getByRole('option').first().click()
+  await expect(page.getByText(/Consulta (abierta|cerrada)|aún no tiene consultas/).first()).toBeVisible()
+  await expect(page.getByText('Registrar hallazgo')).toHaveCount(0)
+  await expect(page.getByRole('button', { name: 'Nueva consulta' })).toHaveCount(0)
+})

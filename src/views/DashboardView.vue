@@ -25,7 +25,7 @@ const modules = computed(() =>
     { title: 'Consultorios', text: 'Espacios de atención del centro odontológico.', icon: 'pi pi-building', to: '/consultorios', permission: P.officeRead },
     { title: 'Usuarios', text: 'Cuentas, roles y permisos del sistema.', icon: 'pi pi-user-edit', to: '/usuarios', permission: P.usersRead },
     { title: 'Agenda', text: 'Citas por profesional y consultorio.', icon: 'pi pi-calendar', to: '/agenda', soon: true },
-    { title: 'Dentigrama', text: 'Estado bucal por pieza con nomenclatura FDI.', icon: 'pi pi-th-large', to: '/dentigrama', soon: true },
+    { title: 'Dentigrama', text: 'Estado bucal por pieza con nomenclatura FDI.', icon: 'pi pi-th-large', to: '/dentigrama', permission: P.odontogramRead },
   ].filter((m) => auth.can(m.permission)),
 )
 

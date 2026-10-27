@@ -24,7 +24,7 @@ const sections: { title?: string; items: NavItem[] }[] = [
     items: [
       { label: 'Pacientes', icon: 'pi pi-users', to: '/pacientes', permission: P.patientRead },
       { label: 'Agenda', icon: 'pi pi-calendar', to: '/agenda', soon: true },
-      { label: 'Dentigrama', icon: 'pi pi-th-large', to: '/dentigrama', soon: true },
+      { label: 'Dentigrama', icon: 'pi pi-th-large', to: '/dentigrama', permission: P.odontogramRead },
       { label: 'Tratamientos', icon: 'pi pi-briefcase', to: '/tratamientos', soon: true },
       { label: 'Presupuestos', icon: 'pi pi-file', to: '/presupuestos', soon: true },
     ],

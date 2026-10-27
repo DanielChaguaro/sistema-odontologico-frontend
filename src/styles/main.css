@@ -33,6 +33,13 @@
   --app-warning: #d97706;
   --app-shadow: 0 1px 2px rgba(6, 44, 46, 0.04), 0 8px 24px rgba(6, 44, 46, 0.06);
 
+  /* Odontograma MSP: rojo = por realizar, azul = realizado */
+  --msp-red: #dc2626;
+  --msp-blue: #1d4ed8;
+  --tooth-face: #ffffff;
+  --tooth-stroke: #94a3b8;
+  --tooth-lost: #eef0f3;
+
   font-family: var(--font-sans);
   color: var(--app-text);
   background: var(--app-bg);
@@ -58,6 +65,12 @@
   --app-danger: #f87171;
   --app-warning: #fbbf24;
   --app-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 12px 32px rgba(0, 0, 0, 0.25);
+
+  --msp-red: #f87171;
+  --msp-blue: #60a5fa;
+  --tooth-face: #e4ebea;
+  --tooth-stroke: #5b6c6e;
+  --tooth-lost: #34403f;
 
   color-scheme: dark;
 }

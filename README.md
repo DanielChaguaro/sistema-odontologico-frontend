@@ -10,8 +10,9 @@ Interfaz web del Sistema Odontológico integrado a DoctorKyn (Vue 3 + TypeScript
 | Personal clínico | RF-07 | Listado con filtros, registro/edición (especialidad, registro ACESS/SENESCYT, consultorios, usuario vinculado), horario semanal |
 | Consultorios | RF-07 | Alta, edición y activación |
 | Usuarios y roles | RF-08 | Usuarios, creación con rol y contraseña temporal, cambio de roles, activación, matriz rol × permiso, bitácora de cambios |
+| Dentigrama | RF-03 | Dentigrama FDI (permanente, temporal y mixta) con simbología del formulario 033 del MSP, consulta clínica, hallazgos por pieza y cara, resolución/anulación, historial por pieza y comparación entre consultas; también como pestaña de la ficha del paciente |
 
-Agenda, dentigrama, tratamientos, presupuestos y reportes aparecen en el menú como "Pronto" (siguientes sprints).
+Agenda, tratamientos, presupuestos y reportes aparecen en el menú como "Pronto" (siguientes sprints).
 
 ## Requisitos
 

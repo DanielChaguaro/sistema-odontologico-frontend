@@ -158,3 +158,48 @@ export interface PractitionerView extends PractitionerSummary {
 
 export interface CatalogItem { code: string; label: string }
 export interface Catalogs { staffTypes: CatalogItem[]; specialties: CatalogItem[] }
+
+// ---------- dental-records: consulta y dentigrama (RF-03) ----------
+export type Dentition = 'PERMANENT' | 'TEMPORARY' | 'MIXED'
+export type ConsultationStatus = 'OPEN' | 'CLOSED'
+export type FindingStatus = 'ACTIVE' | 'RESOLVED' | 'ANNULLED'
+export type ToothSurface = 'VESTIBULAR' | 'LINGUAL' | 'MESIAL' | 'DISTAL' | 'OCLUSAL'
+export type FindingScope = 'SURFACE' | 'TOOTH'
+export type FindingType =
+  | 'CARIES' | 'OBTURACION' | 'SELLANTE_NECESARIO' | 'SELLANTE_REALIZADO'
+  | 'EXTRACCION_INDICADA' | 'PERDIDA_POR_CARIES' | 'PERDIDA_OTRA_CAUSA'
+  | 'ENDODONCIA_NECESARIA' | 'ENDODONCIA_REALIZADA' | 'CORONA_NECESARIA' | 'CORONA_REALIZADA'
+  | 'PROTESIS_FIJA_NECESARIA' | 'PROTESIS_FIJA_REALIZADA' | 'PROTESIS_REMOVIBLE_NECESARIA' | 'PROTESIS_REMOVIBLE_REALIZADA'
+
+export interface ConsultationRequest { dentition: Dentition; reason: string | null; appointmentRef: UUID | null }
+export interface ConsultationView {
+  id: UUID
+  patientId: UUID
+  consultationDate: string
+  practitionerRef: UUID
+  practitionerName: string
+  appointmentRef: UUID | null
+  reason: string | null
+  dentition: Dentition
+  status: ConsultationStatus
+  closedAt: string | null
+}
+
+export interface FindingRequest { fdiCode: number; surface: ToothSurface | null; type: FindingType; notes: string | null }
+export interface FindingView {
+  id: UUID
+  fdiCode: number
+  surface: ToothSurface | null
+  type: FindingType
+  scope: FindingScope
+  notes: string | null
+  status: FindingStatus
+  consultationId: UUID
+  consultationDate: string | null
+  resolvedConsultationId: UUID | null
+  resolvedAt: string | null
+  annulReason: string | null
+  createdBy: string
+  createdAt: string
+}
+export interface OdontogramView { patientId: UUID; consultation: ConsultationView | null; findings: FindingView[] }

@@ -46,7 +46,7 @@ const routes: RouteRecordRaw[] = [
 
       { path: 'mi-perfil', name: 'profile', component: () => import('@/views/ProfileView.vue'), meta: { title: 'Mi perfil' } },
       soon('Agenda odontológica', 'agenda', 'pi pi-calendar'),
-      soon('Dentigrama digital', 'dentigrama', 'pi pi-th-large'),
+      { path: 'dentigrama', name: 'odontogram', component: () => import('@/views/odontogram/OdontogramView.vue'), meta: { permission: P.odontogramRead, title: 'Dentigrama digital' } },
       soon('Tratamientos', 'tratamientos', 'pi pi-briefcase'),
       soon('Presupuestos', 'presupuestos', 'pi pi-file'),
       soon('Reportes', 'reportes', 'pi pi-chart-bar'),

@@ -12,6 +12,8 @@ export const P = {
   practitionerWrite: 'practitioner.write',
   officeRead: 'office.read',
   officeWrite: 'office.write',
+  odontogramRead: 'odontogram.read',
+  odontogramWrite: 'odontogram.write',
 } as const
 
 export type PermissionCode = (typeof P)[keyof typeof P]
@@ -19,6 +21,7 @@ export type PermissionCode = (typeof P)[keyof typeof P]
 /** Etiquetas legibles para la vista de roles. */
 export const permissionGroups: { title: string; codes: PermissionCode[] }[] = [
   { title: 'Pacientes', codes: [P.patientRead, P.patientWrite] },
+  { title: 'Dentigrama', codes: [P.odontogramRead, P.odontogramWrite] },
   { title: 'Personal clínico', codes: [P.practitionerRead, P.practitionerWrite] },
   { title: 'Consultorios', codes: [P.officeRead, P.officeWrite] },
   { title: 'Usuarios y roles', codes: [P.usersRead, P.usersWrite, P.usersManage, P.profilesRead, P.permissionsRead] },

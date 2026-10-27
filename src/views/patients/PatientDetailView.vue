@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, reactive, ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useConfirm } from 'primevue/useconfirm'
 import Tabs from 'primevue/tabs'
 import TabList from 'primevue/tablist'
@@ -21,6 +21,7 @@ import PageHeader from '@/components/PageHeader.vue'
 import StatusTag from '@/components/StatusTag.vue'
 import FormField from '@/components/FormField.vue'
 import AuditTable from '@/components/AuditTable.vue'
+import OdontogramPanel from '@/components/odontogram/OdontogramPanel.vue'
 import { recordsApi } from '@/api/records'
 import { P } from '@/auth/permissions'
 import { useAuthStore } from '@/stores/auth'
@@ -30,11 +31,12 @@ import { consentLabels, formatDate, formatDateTime, fullName, identificationType
 
 const props = defineProps<{ id: string }>()
 const auth = useAuthStore()
+const route = useRoute()
 const router = useRouter()
 const confirm = useConfirm()
 const notify = useNotify()
 
-const tab = ref<string | number>('general')
+const tab = ref<string | number>(route.query.tab === 'dentigrama' && auth.can(P.odontogramRead) ? 'odontogram' : 'general')
 const patient = ref<PatientView | null>(null)
 const consents = ref<ConsentView[]>([])
 const busy = ref(false)
@@ -150,6 +152,7 @@ onMounted(load)
         <TabList>
           <Tab value="general">Datos generales</Tab>
           <Tab value="history">Antecedentes</Tab>
+          <Tab v-if="auth.can(P.odontogramRead)" value="odontogram">Dentigrama</Tab>
           <Tab value="consents">Consentimientos</Tab>
           <Tab v-if="auth.can(P.auditRead)" value="audit">Bitácora</Tab>
         </TabList>
@@ -196,6 +199,11 @@ onMounted(load)
                 <p v-else class="empty">Sin datos sincronizados. Los antecedentes de DoctorKyn se guardan aparte y nunca reemplazan los registrados aquí.</p>
               </div>
             </div>
+          </TabPanel>
+
+          <TabPanel v-if="auth.can(P.odontogramRead)" value="odontogram">
+            <!-- Se monta solo al abrir la pestaña: cada lectura del dentigrama queda auditada. -->
+            <OdontogramPanel v-if="tab === 'odontogram'" :patient-id="patient.id" :patient-age="patient.age" :patient-active="isActive" />
           </TabPanel>
 
           <TabPanel value="consents">

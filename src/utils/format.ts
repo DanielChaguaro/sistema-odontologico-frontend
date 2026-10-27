@@ -51,7 +51,9 @@ export const DAYS: DayOfWeek[] = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 
 
 export const auditActionLabels: Record<string, string> = {
   CREATE: 'Registro', READ: 'Consulta', UPDATE: 'Actualización', STATUS: 'Cambio de estado', CONSENT: 'Consentimiento',
-  DOCTORKYN_SYNC: 'Sincronización DoctorKyn', USER_CREATED: 'Usuario creado', STATUS_CHANGED: 'Estado de cuenta',
+  DOCTORKYN_SYNC: 'Sincronización DoctorKyn', ODONTOGRAM_READ: 'Consulta del dentigrama', CONSULTATION_OPEN: 'Consulta abierta',
+  CONSULTATION_CLOSE: 'Consulta cerrada', FINDING_ADD: 'Hallazgo registrado', FINDING_RESOLVE: 'Hallazgo resuelto',
+  FINDING_ANNUL: 'Hallazgo anulado', USER_CREATED: 'Usuario creado', STATUS_CHANGED: 'Estado de cuenta',
   PROFILES_REPLACED: 'Cambio de roles', ASSIGNMENTS_REPLACED: 'Roles y permisos directos', ACCOUNT_CHANGED: 'Tipo de cuenta',
   USER_DELETED: 'Usuario eliminado', PROFILE_CREATED: 'Rol creado', PROFILE_UPDATED: 'Rol actualizado', PROFILE_DELETED: 'Rol eliminado',
   PERMISSION_CREATED: 'Permiso creado', PERMISSION_UPDATED: 'Permiso actualizado', PERMISSION_DELETED: 'Permiso eliminado',
@@ -80,5 +82,13 @@ export function describeAudit(action: string, details: string | null): string {
     return details.split('->').map((s) => statusWords[s] ?? s).join(' → ')
   }
   if (action === 'PROFILES_REPLACED') return 'Roles: ' + details.replace('->', ' → ')
+  // Dentigrama: solo identificadores (nunca el hallazgo clínico); se muestran abreviados.
+  if (/^(consultation|finding|fdi)=/.test(details)) {
+    const words: Record<string, string> = { consultation: 'Consulta', finding: 'hallazgo', fdi: 'Pieza' }
+    return details.split(',').map((part) => {
+      const [key, value = ''] = part.split('=')
+      return `${words[key!] ?? key} ${key === 'fdi' ? value : value.slice(0, 8) + '…'}`
+    }).join(' · ')
+  }
   return details.replace(/; /g, ' · ')
 }
