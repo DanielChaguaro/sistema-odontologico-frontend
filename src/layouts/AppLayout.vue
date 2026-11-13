@@ -23,7 +23,7 @@ const sections: { title?: string; items: NavItem[] }[] = [
     title: 'Atención clínica',
     items: [
       { label: 'Pacientes', icon: 'pi pi-users', to: '/pacientes', permission: P.patientRead },
-      { label: 'Agenda', icon: 'pi pi-calendar', to: '/agenda', soon: true },
+      { label: 'Agenda', icon: 'pi pi-calendar', to: '/agenda', permission: P.appointmentRead },
       { label: 'Dentigrama', icon: 'pi pi-th-large', to: '/dentigrama', permission: P.odontogramRead },
       { label: 'Tratamientos', icon: 'pi pi-briefcase', to: '/tratamientos', soon: true },
       { label: 'Presupuestos', icon: 'pi pi-file', to: '/presupuestos', soon: true },

@@ -4,7 +4,8 @@ import Skeleton from 'primevue/skeleton'
 import { P } from '@/auth/permissions'
 import { useAuthStore } from '@/stores/auth'
 import { recordsApi } from '@/api/records'
-import { practiceApi } from '@/api/practice'
+import { agendaApi, practiceApi } from '@/api/practice'
+import { toIsoDate } from '@/utils/format'
 import { identityApi } from '@/api/identity'
 
 const auth = useAuthStore()
@@ -18,19 +19,22 @@ const greeting = computed(() => {
 
 const today = new Intl.DateTimeFormat('es-EC', { weekday: 'long', day: 'numeric', month: 'long' }).format(new Date())
 
+interface ModuleCard { title: string; text: string; icon: string; to: string; permission?: string; soon?: boolean }
+
 const modules = computed(() =>
-  [
+  ([
     { title: 'Pacientes', text: 'Registro y ficha clínica continua del paciente.', icon: 'pi pi-users', to: '/pacientes', permission: P.patientRead },
     { title: 'Personal clínico', text: 'Odontólogos, asistentes, horarios y consultorios.', icon: 'pi pi-id-card', to: '/personal', permission: P.practitionerRead },
     { title: 'Consultorios', text: 'Espacios de atención del centro odontológico.', icon: 'pi pi-building', to: '/consultorios', permission: P.officeRead },
     { title: 'Usuarios', text: 'Cuentas, roles y permisos del sistema.', icon: 'pi pi-user-edit', to: '/usuarios', permission: P.usersRead },
-    { title: 'Agenda', text: 'Citas por profesional y consultorio.', icon: 'pi pi-calendar', to: '/agenda', soon: true },
+    { title: 'Agenda', text: 'Citas por profesional y consultorio.', icon: 'pi pi-calendar', to: '/agenda', permission: P.appointmentRead },
     { title: 'Dentigrama', text: 'Estado bucal por pieza con nomenclatura FDI.', icon: 'pi pi-th-large', to: '/dentigrama', permission: P.odontogramRead },
-  ].filter((m) => auth.can(m.permission)),
+  ] as ModuleCard[]).filter((m) => auth.can(m.permission)),
 )
 
 const quickActions = computed(() =>
   [
+    { label: 'Agendar cita', icon: 'pi pi-calendar-plus', to: '/agenda/nueva', permission: P.appointmentWrite },
     { label: 'Nuevo paciente', icon: 'pi pi-user-plus', to: '/pacientes/nuevo', permission: P.patientWrite },
     { label: 'Registrar profesional', icon: 'pi pi-id-card', to: '/personal/nuevo', permission: P.practitionerWrite },
     { label: 'Crear usuario', icon: 'pi pi-user-edit', to: '/usuarios/nuevo', permission: P.usersManage },
@@ -41,6 +45,11 @@ onMounted(async () => {
   // Cada indicador se pide solo si el usuario tiene permiso; un fallo no bloquea el resto.
   const tasks: Promise<void>[] = []
   const result: typeof stats.value = []
+  if (auth.can(P.appointmentRead)) {
+    const day = toIsoDate(new Date())
+    tasks.push(agendaApi.appointments({ from: day, to: day, status: 'CONFIRMED' }).then((list) =>
+      void result.push({ label: 'Citas de hoy', value: list.length, icon: 'pi pi-calendar', to: '/agenda?vista=dia' })))
+  }
   if (auth.can(P.patientRead)) tasks.push(recordsApi.search({ status: 'ACTIVE', size: 1 }).then((p) =>
     void result.push({ label: 'Pacientes activos', value: p.totalElements, icon: 'pi pi-users', to: '/pacientes' })))
   if (auth.can(P.practitionerRead)) tasks.push(practiceApi.practitioners({ status: 'ACTIVE', size: 1 }).then((p) =>
@@ -50,7 +59,7 @@ onMounted(async () => {
   if (auth.can(P.usersRead)) tasks.push(identityApi.users(0, 1).then((p) =>
     void result.push({ label: 'Usuarios', value: p.totalElements, icon: 'pi pi-user-edit', to: '/usuarios' })))
   await Promise.allSettled(tasks)
-  const order = ['Pacientes activos', 'Personal activo', 'Consultorios', 'Usuarios']
+  const order = ['Citas de hoy', 'Pacientes activos', 'Personal activo', 'Consultorios', 'Usuarios']
   stats.value = result.sort((a, b) => order.indexOf(a.label) - order.indexOf(b.label))
   loading.value = false
 })

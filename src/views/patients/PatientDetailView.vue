@@ -128,6 +128,8 @@ onMounted(load)
                   :loading="busy" @click="syncDoctorKyn" />
           <Button v-if="auth.can(P.patientWrite)" :label="isActive ? 'Desactivar' : 'Reactivar'"
                   :icon="isActive ? 'pi pi-ban' : 'pi pi-replay'" severity="secondary" outlined @click="toggleStatus" />
+          <Button v-if="auth.can(P.appointmentWrite) && isActive" label="Agendar cita" icon="pi pi-calendar-plus" severity="secondary" outlined
+                  @click="router.push({ path: '/agenda/nueva', query: { paciente: patient.id } })" />
           <Button v-if="auth.can(P.patientWrite)" label="Editar" icon="pi pi-pencil" @click="router.push(`/pacientes/${patient.id}/editar`)" />
         </template>
       </PageHeader>

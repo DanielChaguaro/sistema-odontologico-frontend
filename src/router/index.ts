@@ -45,7 +45,8 @@ const routes: RouteRecordRaw[] = [
       { path: 'roles', name: 'roles', component: () => import('@/views/users/RolesView.vue'), meta: { permission: P.profilesRead, title: 'Roles y permisos' } },
 
       { path: 'mi-perfil', name: 'profile', component: () => import('@/views/ProfileView.vue'), meta: { title: 'Mi perfil' } },
-      soon('Agenda odontológica', 'agenda', 'pi pi-calendar'),
+      { path: 'agenda', name: 'agenda', component: () => import('@/views/agenda/AgendaView.vue'), meta: { permission: P.appointmentRead, title: 'Agenda odontológica' } },
+      { path: 'agenda/nueva', name: 'appointment-new', component: () => import('@/views/agenda/AppointmentFormView.vue'), meta: { permission: P.appointmentWrite, title: 'Agendar cita' } },
       { path: 'dentigrama', name: 'odontogram', component: () => import('@/views/odontogram/OdontogramView.vue'), meta: { permission: P.odontogramRead, title: 'Dentigrama digital' } },
       soon('Tratamientos', 'tratamientos', 'pi pi-briefcase'),
       soon('Presupuestos', 'presupuestos', 'pi pi-file'),

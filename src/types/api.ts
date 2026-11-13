@@ -157,7 +157,71 @@ export interface PractitionerView extends PractitionerSummary {
 }
 
 export interface CatalogItem { code: string; label: string }
-export interface Catalogs { staffTypes: CatalogItem[]; specialties: CatalogItem[] }
+export interface Catalogs {
+  staffTypes: CatalogItem[]
+  specialties: CatalogItem[]
+  appointmentTypes: CatalogItem[]
+  appointmentStatuses: CatalogItem[]
+}
+
+// ---------- dental-practice: agenda (RF-10) ----------
+// Fechas-hora locales del consultorio ('yyyy-mm-ddTHH:mm:ss', sin zona horaria).
+export type AppointmentType = 'VALORACION_INICIAL' | 'CONTROL' | 'TRATAMIENTO' | 'CONTROL_POSTOPERATORIO' | 'PRESENTACION_PRESUPUESTO' | 'URGENCIA'
+export type AppointmentStatus = 'CONFIRMED' | 'COMPLETED' | 'CANCELLED' | 'NO_SHOW'
+export type AppointmentAction = 'CREATED' | 'RESCHEDULED' | 'UPDATED' | 'CANCELLED' | 'COMPLETED' | 'NO_SHOW'
+
+export interface AppointmentRequest {
+  patientId: UUID
+  practitionerId: UUID
+  officeId: UUID | null
+  startAt: string
+  durationMinutes: number | null
+  type: AppointmentType
+  reason: string
+  notes: string | null
+}
+
+export interface RescheduleRequest { startAt: string; durationMinutes: number | null; officeId: UUID | null; reason: string | null }
+export interface AppointmentDetailsRequest { type: AppointmentType; reason: string; notes: string | null }
+
+export interface AppointmentView {
+  id: UUID
+  patientId: UUID
+  patientName: string
+  patientIdentification: string
+  practitionerId: UUID
+  practitionerName: string
+  specialty: string | null
+  officeId: UUID
+  officeName: string
+  startAt: string
+  endAt: string
+  durationMinutes: number
+  type: AppointmentType
+  reason: string
+  notes: string | null
+  status: AppointmentStatus
+  cancellationReason: string | null
+  createdAt: string
+  createdBy: string
+  updatedAt: string
+  lastModifiedBy: string
+}
+
+export interface AppointmentHistoryView {
+  id: UUID
+  action: AppointmentAction
+  status: AppointmentStatus
+  startAt: string
+  endAt: string
+  officeId: UUID
+  details: string | null
+  actorName: string
+  createdAt: string
+}
+
+export interface AvailabilitySlot { startAt: string; endAt: string; officeId: UUID; officeName: string }
+export interface Availability { practitionerId: UUID; date: string; durationMinutes: number; slots: AvailabilitySlot[] }
 
 // ---------- dental-records: consulta y dentigrama (RF-03) ----------
 export type Dentition = 'PERMANENT' | 'TEMPORARY' | 'MIXED'

@@ -1,4 +1,4 @@
-/** Códigos de permiso del backend (sembrados en identity V2). */
+/** Códigos de permiso del backend (sembrados en identity V2–V4). */
 export const P = {
   usersRead: 'users.read',
   usersWrite: 'users.write',
@@ -14,6 +14,8 @@ export const P = {
   officeWrite: 'office.write',
   odontogramRead: 'odontogram.read',
   odontogramWrite: 'odontogram.write',
+  appointmentRead: 'appointment.read',
+  appointmentWrite: 'appointment.write',
 } as const
 
 export type PermissionCode = (typeof P)[keyof typeof P]
@@ -22,6 +24,7 @@ export type PermissionCode = (typeof P)[keyof typeof P]
 export const permissionGroups: { title: string; codes: PermissionCode[] }[] = [
   { title: 'Pacientes', codes: [P.patientRead, P.patientWrite] },
   { title: 'Dentigrama', codes: [P.odontogramRead, P.odontogramWrite] },
+  { title: 'Agenda', codes: [P.appointmentRead, P.appointmentWrite] },
   { title: 'Personal clínico', codes: [P.practitionerRead, P.practitionerWrite] },
   { title: 'Consultorios', codes: [P.officeRead, P.officeWrite] },
   { title: 'Usuarios y roles', codes: [P.usersRead, P.usersWrite, P.usersManage, P.profilesRead, P.permissionsRead] },
