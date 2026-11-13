@@ -1,0 +1,141 @@
+/*
+ * Sistema de diseño: verde azulado profundo + superficies grafito (tema oscuro por defecto) y su par claro.
+ * Todo color de la interfaz sale de estos tokens; el tema se cambia con la clase .app-dark en <html>.
+ */
+:root {
+  --font-sans: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-serif: 'Source Serif 4', 'Source Serif Pro', Georgia, 'Times New Roman', serif;
+  --app-sidebar-width: 256px;
+  --app-radius: 14px;
+
+  /* Marca: no cambia entre temas */
+  --brand-deep: #073436;
+  --brand-gradient: linear-gradient(165deg, #0b4f4d 0%, #083d3e 48%, #062c2e 100%);
+  --brand-mint: #7fd1c5;
+  --brand-tile: #5fb3a9;
+
+  /* Tema claro */
+  --app-bg: #f2f6f5;
+  --app-surface: #ffffff;
+  --app-surface-2: #f3f8f7;
+  --app-hover: #eaf2f1;
+  --app-border: #dbe5e3;
+  --app-text: #1c2b2c;
+  --app-heading: #0b2324;
+  --app-muted: #5d6f70;
+  --app-primary: #0f6e69;
+  --app-primary-hover: #0c5c58;
+  --app-primary-soft: #e1f2ef;
+  --app-primary-contrast: #ffffff;
+  --app-accent: #0f6e69;
+  --app-success: #15803d;
+  --app-danger: #dc2626;
+  --app-warning: #d97706;
+  --app-shadow: 0 1px 2px rgba(6, 44, 46, 0.04), 0 8px 24px rgba(6, 44, 46, 0.06);
+
+  /* Odontograma MSP: rojo = por realizar, azul = realizado */
+  --msp-red: #dc2626;
+  --msp-blue: #1d4ed8;
+  --tooth-face: #ffffff;
+  --tooth-stroke: #94a3b8;
+  --tooth-lost: #eef0f3;
+
+  font-family: var(--font-sans);
+  color: var(--app-text);
+  background: var(--app-bg);
+  -webkit-font-smoothing: antialiased;
+  color-scheme: light;
+}
+
+:root.app-dark {
+  --app-bg: #0c1214;
+  --app-surface: #121a1c;
+  --app-surface-2: #172225;
+  --app-hover: #1b282b;
+  --app-border: #243134;
+  --app-text: #d8e3e2;
+  --app-heading: #f2f7f6;
+  --app-muted: #8b9b9c;
+  --app-primary: #148079;
+  --app-primary-hover: #1a958d;
+  --app-primary-soft: rgba(63, 184, 170, 0.14);
+  --app-primary-contrast: #ffffff;
+  --app-accent: #7fd1c5;
+  --app-success: #4ade80;
+  --app-danger: #f87171;
+  --app-warning: #fbbf24;
+  --app-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 12px 32px rgba(0, 0, 0, 0.25);
+
+  --msp-red: #f87171;
+  --msp-blue: #60a5fa;
+  --tooth-face: #e4ebea;
+  --tooth-stroke: #5b6c6e;
+  --tooth-lost: #34403f;
+
+  color-scheme: dark;
+}
+
+/* Barra de desplazamiento discreta en ambos temas */
+* { box-sizing: border-box; scrollbar-width: thin; scrollbar-color: var(--app-border) transparent; }
+html, body { margin: 0; min-height: 100%; }
+body { font-size: 14px; background: var(--app-bg); transition: background-color 0.2s ease; }
+a { color: var(--app-accent); text-decoration: none; }
+h1, h2, h3 { margin: 0; color: var(--app-heading); }
+::selection { background: var(--app-primary-soft); }
+
+/* Rótulo pequeño en mayúsculas espaciadas (como «BIENVENIDO» del acceso). */
+.eyebrow { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--app-accent); }
+.serif { font-family: var(--font-serif); font-weight: 500; letter-spacing: -0.01em; }
+
+/* ---------- Bloques de página ---------- */
+.page { display: flex; flex-direction: column; gap: 1.25rem; }
+.page-header { display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+.page-header h1 { font-family: var(--font-serif); font-size: 2rem; font-weight: 500; letter-spacing: -0.015em; line-height: 1.15; }
+.page-header .subtitle { margin: 0.35rem 0 0; color: var(--app-muted); }
+.page-header .actions { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+.breadcrumb { font-size: 0.72rem; color: var(--app-muted); margin-bottom: 0.4rem; letter-spacing: 0.04em; }
+.breadcrumb a { color: var(--app-muted); }
+.breadcrumb a:hover { color: var(--app-accent); }
+
+.card {
+  background: var(--app-surface);
+  border: 1px solid var(--app-border);
+  border-radius: var(--app-radius);
+  padding: 1.25rem;
+  box-shadow: var(--app-shadow);
+}
+.card-title { font-size: 1rem; font-weight: 600; margin: 0 0 1rem; display: flex; align-items: center; gap: 0.5rem; }
+.card-title .pi { color: var(--app-accent); }
+
+.toolbar { display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center; margin-bottom: 1rem; }
+.toolbar .grow { flex: 1 1 260px; }
+
+/* ---------- Formularios ---------- */
+.form-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1rem 1.25rem; }
+.form-grid .span-2 { grid-column: span 2; }
+.form-grid .span-all { grid-column: 1 / -1; }
+.field { display: flex; flex-direction: column; gap: 0.35rem; min-width: 0; }
+.field > label { font-size: 0.82rem; font-weight: 600; color: var(--app-heading); }
+.field > label .req { color: var(--app-danger); margin-left: 2px; }
+.field .hint { font-size: 0.75rem; color: var(--app-muted); }
+.field .error { font-size: 0.75rem; color: var(--app-danger); }
+.form-actions { display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 0.5rem; }
+@media (max-width: 640px) { .form-grid .span-2 { grid-column: auto; } }
+
+/* ---------- Datos de solo lectura ---------- */
+.data-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem 1.5rem; margin: 0; }
+.data-list dt { font-size: 0.7rem; color: var(--app-muted); text-transform: uppercase; letter-spacing: 0.08em; }
+.data-list dd { margin: 0.25rem 0 0; font-weight: 500; overflow-wrap: anywhere; color: var(--app-heading); }
+.data-list .wide { grid-column: 1 / -1; }
+.empty { color: var(--app-muted); font-style: italic; }
+
+.muted { color: var(--app-muted); }
+.mono { font-family: ui-monospace, 'Cascadia Mono', Consolas, monospace; font-size: 0.85em; }
+.link-cell { font-weight: 600; color: var(--app-heading); }
+.link-cell:hover { color: var(--app-accent); }
+.chips { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+.split { display: grid; grid-template-columns: minmax(0, 2fr) minmax(280px, 1fr); gap: 1.25rem; align-items: start; }
+@media (max-width: 1100px) { .split { grid-template-columns: minmax(0, 1fr); } }
+
+.p-datatable .p-datatable-tbody > tr > td { padding-block: 0.7rem; }
+.p-datatable-table-container { border-radius: 10px; }
